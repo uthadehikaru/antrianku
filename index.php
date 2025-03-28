@@ -1,0 +1,71 @@
+<?php
+include('function.php')
+?>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>No Antrian</title>
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.php">No Antrian</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section class="container mt-5">
+        <div class="row">
+            <?php foreach ($queues as $queue) : ?>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title text-center display-1 fw-bold" id="section-<?php echo $queue['section']; ?>"><?php echo strtoupper($queue['section']); ?><?php echo str_pad($queue['queue_no'], 3, '0', STR_PAD_LEFT); ?></h5>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <script src="/bootstrap/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+<script>
+function updateQueue() {
+    // Update each section
+    ['a', 'b', 'c'].forEach(section => {
+        $.get('api.php?section=' + section, function(data) {
+            // Pad number with leading zeros to 3 digits
+            let paddedNumber = String(data).padStart(3, '0');
+            // Update display with section letter + padded number
+            $('#section-' + section).text(section.toUpperCase() + paddedNumber);
+        });
+    });
+}
+
+// Update initially
+updateQueue();
+
+// Update every 5 seconds
+setInterval(updateQueue, 5000);
+</script>
+
+
+</body>
+
+</html>
