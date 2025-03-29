@@ -15,28 +15,14 @@ include('function.php')
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.php">No Antrian</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php include('navbar.php'); ?>
     <section class="container mt-5">
         <div class="row">
             <?php foreach ($queues as $queue) : ?>
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title text-center display-1 fw-bold" id="section-<?php echo $queue['section']; ?>"><?php echo strtoupper($queue['section']); ?><?php echo str_pad($queue['print_no']+1, 3, '0', STR_PAD_LEFT); ?></h5>
+                        <h5 class="card-title text-center display-1 fw-bold" id="section-<?php echo $queue['section']; ?>"><?php echo strtoupper($queue['section']); ?><?php echo str_pad($queue['print_no'], 3, '0', STR_PAD_LEFT); ?></h5>
                         <div class="row g-2">
                             <div class="col-lg-12">
                                 <a href="print.php?section=<?php echo $queue['section']; ?>" target="_blank" class="btn btn-primary w-100">Cetak Antrian</a>
@@ -56,8 +42,9 @@ function updateQueue() {
     // Update each section
     ['a', 'b', 'c'].forEach(section => {
         $.get('api.php?page=form&section=' + section, function(data) {
+            let print_no = (parseInt(data) + 1);
             // Pad number with leading zeros to 3 digits
-            let paddedNumber = String(data).padStart(3, '0');
+            let paddedNumber = String(print_no).padStart(3, '0');
             // Update display with section letter + padded number
             $('#section-' + section).text(section.toUpperCase() + paddedNumber);
         });
